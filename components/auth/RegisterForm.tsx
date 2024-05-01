@@ -19,8 +19,9 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { FormError } from '../global_components/form-error'
 import { FormSuccess } from '../global_components/form-success'
-import { login } from '@/actions/login'
+import { register } from '@/actions/register'
 import { ButtonLoading } from '../global_components/loading-button'
+
 
 export const RegisterForm = () => {
 
@@ -32,7 +33,7 @@ export const RegisterForm = () => {
     setSuccess("");
     setError("");
      startTransition(()=>{
-      login(values)
+      register(values)
       .then((data)=>{
         setError(data.error);
         setSuccess(data.success);
@@ -44,9 +45,10 @@ export const RegisterForm = () => {
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver : zodResolver(RegisterSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
-      name: "",
+      
     }
   })
 
@@ -68,7 +70,7 @@ export const RegisterForm = () => {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder='Your full name' type='email' disabled = {ispending}/>
+                  <Input {...field} placeholder='Your full name' type='text' disabled = {ispending}/>
                 </FormControl>
                 <FormMessage/>
               </FormItem>
