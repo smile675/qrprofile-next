@@ -1,4 +1,5 @@
 "use client"
+import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -19,11 +20,25 @@ import { Button } from '../ui/button'
 import { FormError } from '../global_components/form-error'
 import { FormSuccess } from '../global_components/form-success'
 import { login } from '@/actions/login'
+import { ButtonLoading } from '../global_components/loading-button'
 
 export const LoginForm = () => {
 
+  const [ispending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+
   const onSubmit = (values: z.infer<typeof LoginSchema>)=>{
-     login(values);
+    setSuccess("");
+    setError("");
+     startTransition(()=>{
+      login(values)
+      .then((data)=>{
+        setError(data.error);
+        setSuccess(data.success);
+      })
+      ;
+     });
   }
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -52,7 +67,7 @@ export const LoginForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder='emailuser@example.com' type='email'/>
+                  <Input {...field} placeholder='emailuser@example.com' type='email' disabled = {ispending}/>
                 </FormControl>
                 <FormMessage/>
               </FormItem>
@@ -65,7 +80,7 @@ export const LoginForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder='*******' type='password'/>
+                  <Input {...field} placeholder='*******' type='password' disabled = {ispending}/>
                 </FormControl>
                 <FormMessage/>
               </FormItem>
@@ -73,15 +88,21 @@ export const LoginForm = () => {
           />
         </div>
 
-        <FormError message='error'/>
-        <FormSuccess message='success'/>
+        <FormError message= {error}/>
+        <FormSuccess message={success}/>
 
-        <Button
-        type='submit'
-        className='w-full'
-        >
-          Login
-        </Button>
+        {
+          ispending
+          ? <ButtonLoading/>
+          : <Button
+          type='submit'
+          className='w-full'
+          disabled = {ispending}
+          >
+            Login
+          </Button>  
+        }
+        
         
       </form>
     </Form>
