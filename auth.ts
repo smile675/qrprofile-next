@@ -22,6 +22,13 @@ export const {
     signOut,
 } = NextAuth({
     callbacks: {
+        // async signIn({user}){
+        //     const existingUser = await getUserbyId(user.id);
+        //     if(!existingUser || !existingUser.emailVerified){
+        //         return false;
+        //     }
+        //     return true;
+        // },
         
         async session({token, session}){
             // console.log({
