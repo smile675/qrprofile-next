@@ -26,16 +26,16 @@ export const LoginForm = () => {
 
   const [ispending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
+  // const [success, setSuccess] = useState<string | undefined>("");
 
   const onSubmit = (values: z.infer<typeof LoginSchema>)=>{
-    setSuccess("");
+    // setSuccess("");
     setError("");
      startTransition(()=>{
       login(values)
       .then((data)=>{
-        setError(data.error);
-        setSuccess(data.success);
+        setError(data?.error);
+        // setSuccess(data.success);
       })
       ;
      });
@@ -89,7 +89,7 @@ export const LoginForm = () => {
         </div>
 
         <FormError message= {error}/>
-        <FormSuccess message={success}/>
+        {/* <FormSuccess message={success}/> */}
 
         {
           ispending
