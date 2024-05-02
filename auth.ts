@@ -37,13 +37,14 @@ export const {
 
 
     callbacks: {
-        // async signIn({user}){
-        //     const existingUser = await getUserbyId(user.id);
-        //     if(!existingUser || !existingUser.emailVerified){
-        //         return false;
-        //     }
-        //     return true;
-        // },
+        async signIn({user, account}){
+            // alow Oauth
+            if(account?.provider !== 'credentials') return true;
+            const existingUser = await getUserbyId(user.id);
+            if(!existingUser || !existingUser.emailVerified) return false;
+            // TODO: add 2fa check
+            return true;
+        },
         
         async session({token, session}){
             // console.log({

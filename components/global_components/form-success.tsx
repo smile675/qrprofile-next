@@ -1,5 +1,4 @@
 import { CheckCircle } from "lucide-react";
-import { FaExclamationCircle } from "react-icons/fa";
 
 interface FormSuccessProps{
     message?: string,

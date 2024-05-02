@@ -22,6 +22,7 @@ import { FormSuccess } from '../global_components/form-success'
 import { login } from '@/actions/login'
 import { ButtonLoading } from '../global_components/loading-button'
 import { useSearchParams } from 'next/navigation'
+import { FormWarning } from '../global_components/form-warning'
 
 export const LoginForm = () => {
 
@@ -34,15 +35,18 @@ export const LoginForm = () => {
   const [ispending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
+  // const [warning, setWarning] = useState<string | undefined>("");
 
   const onSubmit = (values: z.infer<typeof LoginSchema>)=>{
-    // setSuccess("");
+    setSuccess("");
     setError("");
+    // setWarning("");
      startTransition(()=>{
       login(values)
       .then((data)=>{
         setError(data?.error);
-        // setSuccess(data.success);
+        setSuccess(data?.success);
+        // setWarning(data?.warning);
       })
       ;
      });
@@ -96,7 +100,8 @@ export const LoginForm = () => {
         </div>
 
         <FormError message= {error || urlError}/>
-        <FormSuccess message={success}/>
+        {/* <FormSuccess message={success}/> */}
+        <FormWarning message={success}/>
 
         {
           ispending
