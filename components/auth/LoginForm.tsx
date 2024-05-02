@@ -21,12 +21,19 @@ import { FormError } from '../global_components/form-error'
 import { FormSuccess } from '../global_components/form-success'
 import { login } from '@/actions/login'
 import { ButtonLoading } from '../global_components/loading-button'
+import { useSearchParams } from 'next/navigation'
 
 export const LoginForm = () => {
 
+  const searchParams = useSearchParams();
+
+  const urlError = searchParams.get("error") === "OAuthAccountNotLinked"
+  ? "Email already in use with different provider"
+  : ""
+
   const [ispending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
-  // const [success, setSuccess] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
 
   const onSubmit = (values: z.infer<typeof LoginSchema>)=>{
     // setSuccess("");
@@ -88,8 +95,8 @@ export const LoginForm = () => {
           />
         </div>
 
-        <FormError message= {error}/>
-        {/* <FormSuccess message={success}/> */}
+        <FormError message= {error || urlError}/>
+        <FormSuccess message={success}/>
 
         {
           ispending
