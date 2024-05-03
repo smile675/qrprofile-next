@@ -3,7 +3,7 @@ import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { LoginSchema } from '@/schemas'
+import { PasswordResetSchema } from '@/schemas'
 
 
 import { 
@@ -18,55 +18,45 @@ import { CardWrapper } from './card-wrapper'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { FormError } from '../global_components/form-error'
-import { FormSuccess } from '../global_components/form-success'
 import { login } from '@/actions/login'
 import { ButtonLoading } from '../global_components/loading-button'
-import { useSearchParams } from 'next/navigation'
-import { FormWarning } from '../global_components/form-warning'
-import Link from 'next/link'
+import { FormSuccess } from '../global_components/form-success'
+import { passwordReset } from '@/actions/passwordReset'
 
-export const LoginForm = () => {
 
-  const searchParams = useSearchParams();
-
-  const urlError = searchParams.get("error") === "OAuthAccountNotLinked"
-  ? "Email already in use with different provider"
-  : ""
+export const PasswordResetForm = () => {
 
   const [ispending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  // const [warning, setWarning] = useState<string | undefined>("");
 
-  const onSubmit = (values: z.infer<typeof LoginSchema>)=>{
+
+  const onSubmit = (values: z.infer<typeof PasswordResetSchema>)=>{
     setSuccess("");
     setError("");
-    // setWarning("");
+
      startTransition(()=>{
-      login(values)
+      passwordReset(values)
       .then((data)=>{
         setError(data?.error);
         setSuccess(data?.success);
-        // setWarning(data?.warning);
-      })
-      ;
+
+      });
      });
   }
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver : zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof PasswordResetSchema>>({
+    resolver : zodResolver(PasswordResetSchema),
     defaultValues: {
       email: "",
-      password: "",
     }
   })
 
   return (
    <CardWrapper
-    headerLabel='Welcome Back'
-    backButtonLabel="Don't have an account?"
-    backButtonHref='/register'
-    showSocial
+    headerLabel='Reset your password'
+    backButtonLabel="Back to Login"
+    backButtonHref='/login'
    >
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
@@ -85,27 +75,11 @@ export const LoginForm = () => {
               </FormItem>
             }
           />
-          <FormField
-            control={form.control}
-            name='password'
-            render={({ field })=>
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder='*******' type='password' disabled = {ispending}/>
-                </FormControl>
-                <FormMessage/>
-              </FormItem>
-            }
-          />
         </div>
-        <Button variant="link" size= "sm" asChild className='px-0 font-normal'>
-            <Link href="/reset-password">Forgot Password?</Link>
-        </Button>
 
-        <FormError message= {error || urlError}/>
-        {/* <FormSuccess message={success}/> */}
-        <FormWarning message={success}/>
+        <FormError message= {error}/>
+        <FormSuccess message={success}/>
+
 
         {
           ispending
@@ -115,7 +89,7 @@ export const LoginForm = () => {
           className='w-full'
           disabled = {ispending}
           >
-            Login
+            Send Reset Email
           </Button>  
         }
         

@@ -42,6 +42,6 @@ export const register = async (values: z.infer<typeof RegisterSchema> )=>{
     
 
     return {
-        success: "Confirmation email sent!"
+        success: "Email verificaiton sent, Please verify your email!"
     }
 }
