@@ -2,6 +2,7 @@
 
 import { signIn } from "@/auth";
 import { getUserbyEmail } from "@/data/user";
+import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/tokens";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { LoginSchema } from "@/schemas";
@@ -26,6 +27,8 @@ export const login = async (values: z.infer<typeof LoginSchema> )=>{
 
    if(!existingUser.emailVerified){
     const verificationToken = await generateVerificationToken(existingUser.email);
+
+    await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
     // console.log("came to the function: verification token sent on login if email not verified")
     return {success: "Email not verified! Another verification email sent, please verify your email"}
