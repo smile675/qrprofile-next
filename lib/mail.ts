@@ -56,3 +56,33 @@ export const sendPasswordResetEmail = async(
     });
 
 }
+
+
+export const sendTwoFactorTokenEmail = async(
+    email: string,
+    token: string,
+)=>{
+    
+      // Create a nodemailer transporter using SMTP details
+        let transporter = nodemailer.createTransport({
+            host: "smtp.titan.email",
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASSWORD,
+            },
+        });
+
+
+    // Send email
+    await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Two Factor Token',
+        html: `<p>Your two factor token : ${token}</p>`,
+    });
+
+}
+
+

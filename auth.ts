@@ -5,6 +5,7 @@ import {db} from "@/lib/db"
 
 import { getUserbyId } from "./data/user"
 import { PaymentStatus } from "@prisma/client"
+import { getTwoFactorConfirmationByUserId } from "./data/twoFactorConfirmation"
 
 declare module "next-auth" {
     interface Session {
@@ -42,7 +43,19 @@ export const {
             if(account?.provider !== 'credentials') return true;
             const existingUser = await getUserbyId(user.id);
             if(!existingUser || !existingUser.emailVerified) return false;
-            // TODO: add 2fa check
+            // prevent user to login if two factor enabled
+            if(existingUser.isTowFectorEnabled) {
+                const twoFactorConfirmation= await getTwoFactorConfirmationByUserId(existingUser.id)
+                // if twofactor dont have not allow to log in
+                if (!twoFactorConfirmation) return false
+
+                // after login delete twofactor confirmation from db
+                await db.twoFectorConfirmation.delete({
+                    where: {
+                        id: twoFactorConfirmation.id
+                    }
+                })
+            }
             return true;
         },
         

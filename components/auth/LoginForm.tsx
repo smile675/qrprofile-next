@@ -24,6 +24,8 @@ import { ButtonLoading } from '../global_components/loading-button'
 import { useSearchParams } from 'next/navigation'
 import { FormWarning } from '../global_components/form-warning'
 import Link from 'next/link'
+import { OTPInput } from 'input-otp'
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '../ui/input-otp'
 
 export const LoginForm = () => {
 
@@ -36,20 +38,34 @@ export const LoginForm = () => {
   const [ispending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
+  const [showTwoFactor, setShowTwoFactor] = useState(false);
   // const [warning, setWarning] = useState<string | undefined>("");
 
   const onSubmit = (values: z.infer<typeof LoginSchema>)=>{
+    // console.log({values});
     setSuccess("");
     setError("");
     // setWarning("");
      startTransition(()=>{
       login(values)
       .then((data)=>{
-        setError(data?.error);
-        setSuccess(data?.success);
+        if(data?.error){
+          // form.reset();
+          setError(data?.error);
+        }
+
+        if(data?.success){
+          form.reset(); 
+          setSuccess(data?.success);
+        }
+
+        if(data?.twoFactor){
+          setShowTwoFactor(true);
+        }
+
         // setWarning(data?.warning);
-      })
-      ;
+      }).catch(()=> setError("Unknown Error Occured"));
+      
      });
   }
 
@@ -72,7 +88,42 @@ export const LoginForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
 
         <div className='space-y-4'>
-          <FormField
+          {
+            showTwoFactor && (
+
+            <div className='w-full flex justify-center'>
+              <FormField
+            control={form.control}
+            name='twoFCode'
+            render={({ field })=>
+              <FormItem>
+                <div className=' w-full text-center'>
+                <FormLabel>Two Factor Code from Email</FormLabel>
+                </div>
+                <FormControl>
+                <InputOTP maxLength={6} {...field} disabled = {ispending}>
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+                </FormControl>
+                <FormMessage/>
+              </FormItem>
+            }
+          />
+            </div>
+              
+            )
+          }
+          {
+            !showTwoFactor && (
+              <>
+              <FormField
             control={form.control}
             name='email'
             render={({ field })=>
@@ -98,10 +149,15 @@ export const LoginForm = () => {
               </FormItem>
             }
           />
+              </>
+            )
+          }
         </div>
-        <Button variant="link" size= "sm" asChild className='px-0 font-normal'>
-            <Link href="/reset-password">Forgot Password?</Link>
-        </Button>
+        {!showTwoFactor && (
+          <Button variant="link" size= "sm" asChild className='px-0 font-normal'>
+          <Link href="/reset-password">Forgot Password?</Link>
+          </Button>
+        )}
 
         <FormError message= {error || urlError}/>
         {/* <FormSuccess message={success}/> */}
@@ -115,7 +171,7 @@ export const LoginForm = () => {
           className='w-full'
           disabled = {ispending}
           >
-            Login
+            {showTwoFactor? "Confirm": "Login"}
           </Button>  
         }
         
