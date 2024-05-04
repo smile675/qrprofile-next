@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import NavBar from "@/components/global_components/NavBar";
-
+import { SessionProvider } from "next-auth/react";
+import {auth} from "@/auth"
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -10,16 +10,19 @@ export const metadata: Metadata = {
   description: "Digitalize your profile",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
   return (
-    <html lang="en">
+    <SessionProvider session={session}>
+      <html lang="en">
       <body className={inter.className}>
         {children}
       </body>
     </html>
+    </SessionProvider>
   );
 }
