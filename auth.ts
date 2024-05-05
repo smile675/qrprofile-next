@@ -6,6 +6,7 @@ import {db} from "@/lib/db"
 import { getUserbyId } from "./data/user"
 import { PaymentStatus } from "@prisma/client"
 import { getTwoFactorConfirmationByUserId } from "./data/twoFactorConfirmation"
+import { getAccountByUserId } from "./data/account"
 
 
 
@@ -67,6 +68,12 @@ export const {
             if(session.user){
                 session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
             }
+            if(session.user){
+                session.user.name = token.name;
+                session.user.email = token.email!;
+                session.user.image = token.picture;
+                session.user.isOAuth = token.isOAuth as boolean;
+            }
             // console.log({session});
             return session;
         },
@@ -74,6 +81,14 @@ export const {
             if(!token.sub) return token;
             const existingUser = await getUserbyId(token.sub);
             if(!existingUser) return token;
+
+            const existingAccount = await getAccountByUserId(existingUser.id);
+            
+            token.isOAuth = !!existingAccount;
+            token.name = existingUser.name;
+            token.email = existingUser.email;
+            token.picture = existingUser.image;
+            
             token.paymentStatus = existingUser.paymentStatus;
             token.isTwoFactorEnabled = existingUser.isTowFectorEnabled
             // console.log({token: token});

@@ -8,7 +8,7 @@ import { UserButton } from "@/components/auth/_buttons/user-button"
     const path = usePathname()
 
     const profileRoute = {
-        setting : "/settings",
+        profile : "/profile",
         server: "/server",
         client: "/client",
         pro: "/pro"
@@ -17,9 +17,9 @@ import { UserButton } from "@/components/auth/_buttons/user-button"
         <nav className="bg-secondary w-full p-2 h-16 flex justify-center items-center shadow-sm gap-2">
 
             <Button asChild
-            variant={path === profileRoute.setting? "default": "outline"}
+            variant={path === profileRoute.profile? "default": "outline"}
             >
-                <Link href={profileRoute.setting}>Settings</Link>
+                <Link href={profileRoute.profile}>Profile</Link>
             </Button>
             <Button asChild
             variant={path === profileRoute.server? "default": "outline"}
