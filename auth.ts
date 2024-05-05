@@ -7,13 +7,7 @@ import { getUserbyId } from "./data/user"
 import { PaymentStatus } from "@prisma/client"
 import { getTwoFactorConfirmationByUserId } from "./data/twoFactorConfirmation"
 
-declare module "next-auth" {
-    interface Session {
-      user: {
-        paymentStatus: PaymentStatus
-      } & DefaultSession["user"]
-    }
-}
+
 
 
 export const {
@@ -68,8 +62,10 @@ export const {
             }
             
             if(token.paymentStatus && session.user){
-                
-                session.user.paymentStatus = token.paymentStatus;
+                session.user.paymentStatus = token.paymentStatus as PaymentStatus;
+            }
+            if(session.user){
+                session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
             }
             // console.log({session});
             return session;
@@ -79,6 +75,7 @@ export const {
             const existingUser = await getUserbyId(token.sub);
             if(!existingUser) return token;
             token.paymentStatus = existingUser.paymentStatus;
+            token.isTwoFactorEnabled = existingUser.isTowFectorEnabled
             // console.log({token: token});
             return token;
         },
