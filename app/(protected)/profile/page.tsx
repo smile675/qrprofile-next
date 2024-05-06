@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button"
 import { useState, useTransition } from "react"
 import { ProfileUpdateSchema } from "@/schemas"
 
+import { useSession } from "next-auth/react"
+
 import { 
   Form,
   FormField,
@@ -32,9 +34,11 @@ const Profile =  () => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
+  const {update} = useSession();
 
   const onSubmit = (values: z.infer<typeof ProfileUpdateSchema>)=> {
     startTransition(()=>{
+      console.log(values.password);
       setError("");
       setSuccess("")
 
@@ -44,6 +48,7 @@ const Profile =  () => {
           setError(data.error);
         }
         if(data.success){
+          update();
           setSuccess(data.success);
         }
       })
@@ -89,7 +94,10 @@ const Profile =  () => {
               </FormItem>
             )}
             />
-            <FormField
+            {
+              user?.isOAuth === false ? (
+                <>
+                <FormField
             control={form.control}
             name="email"
             render={({field})=>(
@@ -116,9 +124,10 @@ const Profile =  () => {
                 <FormControl>
                   <Input 
                   {...field}
-                  disabled = {isPending}
                   placeholder="******"
-                  type="password"
+                  // type="password"
+                  disabled = {isPending}
+                  
                   />
                 </FormControl>
                 <FormMessage/>
@@ -136,7 +145,7 @@ const Profile =  () => {
                   {...field}
                   disabled = {isPending}
                   placeholder="******"
-                  type="password"
+                  // type="password"
                   />
                 </FormControl>
                 <FormMessage/>
@@ -166,6 +175,28 @@ const Profile =  () => {
               
             )}
             />
+                </>
+              ):
+              <FormField
+              control={form.control}
+              name="email"
+              render={({field})=>(
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input 
+                    {...field}
+                    disabled = {true}
+                    placeholder="Your Email"
+                    type="email"
+                    />
+                  </FormControl>
+                  <FormMessage/>
+                </FormItem>
+              )}
+              />
+            }
+            
             </div>
             <FormSuccess message={success}/>
             <FormError message={error}/>

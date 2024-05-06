@@ -1,4 +1,4 @@
-import NextAuth, { type DefaultSession } from "next-auth"
+import NextAuth from "next-auth"
 import authConfig from "@/auth.config"
 import {PrismaAdapter} from "@auth/prisma-adapter"
 import {db} from "@/lib/db"
@@ -13,9 +13,11 @@ import { getAccountByUserId } from "./data/account"
 
 export const {
     handlers: {GET, POST},
-    auth,
     signIn,
     signOut,
+    auth,
+    unstable_update,
+
 } = NextAuth({
     pages: {
         signIn: "/login",
@@ -33,13 +35,20 @@ export const {
 
 
     callbacks: {
+        async redirect({ url, baseUrl }) {
+            // Allows relative callback URLs
+            if (url.startsWith("/")) return `${baseUrl}${url}`
+            // Allows callback URLs on the same origin
+            else if (new URL(url).origin === baseUrl) return url
+            return baseUrl
+          },
         async signIn({user, account}){
             // alow Oauth
             if(account?.provider !== 'credentials') return true;
             const existingUser = await getUserbyId(user.id);
             if(!existingUser || !existingUser.emailVerified) return false;
             // prevent user to login if two factor enabled
-            if(existingUser.isTowFectorEnabled) {
+            if(existingUser.isTwoFactorEnabled) {
                 const twoFactorConfirmation= await getTwoFactorConfirmationByUserId(existingUser.id)
                 // if twofactor dont have not allow to log in
                 if (!twoFactorConfirmation) return false
@@ -53,7 +62,7 @@ export const {
             }
             return true;
         },
-        
+ 
         async session({token, session}){
             // console.log({
             //     sessonTOken: token,
@@ -90,7 +99,7 @@ export const {
             token.picture = existingUser.image;
             
             token.paymentStatus = existingUser.paymentStatus;
-            token.isTwoFactorEnabled = existingUser.isTowFectorEnabled
+            token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled
             // console.log({token: token});
             return token;
         },

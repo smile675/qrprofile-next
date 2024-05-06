@@ -40,7 +40,7 @@ export const login = async (values: z.infer<typeof LoginSchema> )=>{
    }
 
    // if tow factor enabled, send email with the token
-   if(existingUser.isTowFectorEnabled && existingUser.email){
+   if(existingUser.isTwoFactorEnabled && existingUser.email){
 
     // if login schema include two factor code check first
     if(twoFCode){

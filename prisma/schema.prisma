@@ -32,7 +32,7 @@ model User {
   paymentStatus         PaymentStatus          @default(PENDING)
   image                 String?
   accounts              Account[]
-  isTowFectorEnabled    Boolean                @default(false)
+  isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFectorConfirmation?
 
   @@map("users")

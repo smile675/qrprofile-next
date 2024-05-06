@@ -1,4 +1,5 @@
 import { logOut } from "@/actions/logout";
+import { redirect } from "next/navigation";
 
 
 interface LogoutButtonProps{
@@ -8,6 +9,7 @@ interface LogoutButtonProps{
 export const LogOutButton  = ({children}:  LogoutButtonProps)=>{
     const onClick = ()=> {
         logOut()
+        
     }
 
     return (
