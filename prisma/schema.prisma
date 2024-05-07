@@ -92,3 +92,6 @@ model TwoFectorConfirmation {
 
   @@unique([userId])
 }
+
+// i will make session table in database
+// testing which branch will receive this
