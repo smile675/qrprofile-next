@@ -1,6 +1,6 @@
 "use server"
 
-import { signIn } from "@/auth";
+import { signIn, unstable_update } from "@/auth";
 import { getTwoFactorConfirmationByUserId } from "@/data/twoFactorConfirmation";
 import { getTwoFactorTokenByEmail } from "@/data/twoFactorToken";
 import { getUserbyEmail } from "@/data/user";

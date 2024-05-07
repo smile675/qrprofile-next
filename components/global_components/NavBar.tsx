@@ -10,7 +10,6 @@ import { Menu } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerTrigger } from '../ui/drawer';
 
 
-import LoginButton from '../auth/loginButton';
 import { UserButton } from '../auth/_buttons/user-button';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 

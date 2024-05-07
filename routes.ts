@@ -1,4 +1,18 @@
 /**
+ * all route names
+ * @type {object}
+ */
+
+export const myRoutes = {
+    root: "http//localhost:3000",
+    home: "/",
+    login: "/login",
+    register: "/register",
+    profile: "/profile",
+}
+
+
+/**
  * An array of routes that are accessible to the public
  * do not need authentication
  * @type {string[]}

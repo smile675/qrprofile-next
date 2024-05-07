@@ -16,7 +16,7 @@ import { useCurrentUser } from "@/hooks/useCurrentUser"
 import { LogOutButton } from "./logout-button"
 import { LogOut } from "lucide-react"
 import { DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
-import LoginButton from "../loginButton"
+import LoginButton from "./loginButton"
 
 
 
@@ -70,6 +70,7 @@ import LoginButton from "../loginButton"
           <LogOutButton>
             Log out
           </LogOutButton>
+          
           
         </DropdownMenuItem>
       </DropdownMenuContent>

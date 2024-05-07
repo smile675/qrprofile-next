@@ -1,3 +1,14 @@
+// import NextAuth from "next-auth"
+// import Google from "next-auth/providers/google"
+// import GitHub from "next-auth/providers/github"
+// import Credentials from "next-auth/providers/credentials"
+
+ 
+// export const { handlers, signIn, signOut, auth } = NextAuth({
+//   providers: [Google, GitHub],
+// })
+
+
 import NextAuth from "next-auth"
 import authConfig from "@/auth.config"
 import {PrismaAdapter} from "@auth/prisma-adapter"
@@ -86,7 +97,9 @@ export const {
             // console.log({session});
             return session;
         },
-        async jwt({token, user, session}){
+        async jwt({token, user, session, trigger}){
+
+            
 
             if(!token.sub) return token;
             const existingUser = await getUserbyId(token.sub);
@@ -102,6 +115,10 @@ export const {
             token.paymentStatus = existingUser.paymentStatus;
             token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled
             // console.log({token: token});
+
+            if(trigger=="signIn"){
+                
+            }
             return token;
         },
     },
@@ -109,3 +126,4 @@ export const {
     session: {strategy: "jwt"},
     ...authConfig
 })
+

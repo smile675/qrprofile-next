@@ -1,3 +1,4 @@
+
 "use client"
 import React from 'react'
 import {useRouter} from 'next/navigation'
@@ -17,7 +18,7 @@ const LoginButton = ({
     const router = useRouter();
 
     const onClick = () => {
-        router.push('/login');
+        router.push('/api/auth/signin');
     }
   return (
     <span onClick={onClick} className='cursor-pointer'>

@@ -2,6 +2,7 @@
 
 import {signOut} from "@/auth"
 
+
 export const logOut = async ()=>{
     await signOut(
         {
@@ -20,7 +21,8 @@ export const logOut = async ()=>{
 
             redirectTo: "/",
             redirect: true,
+            
         }
+       
     );
-    
 }

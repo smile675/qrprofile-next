@@ -1,17 +1,15 @@
 import { logOut } from "@/actions/logout";
-// import { useSession } from "next-auth/react";
-
-
-
+// import { signOut } from "next-auth/react"
+import { useRouter  } from "next/navigation";
 interface LogoutButtonProps{
     children? : React.ReactNode;
 }
 
 export const LogOutButton  = ({children}:  LogoutButtonProps)=>{
+    const router = useRouter()
     const onClick = ()=> {
         logOut()
-        // let session = useSession();
-        // session.data = null;
+        // signOut()
     }
 
     return (
@@ -20,3 +18,4 @@ export const LogOutButton  = ({children}:  LogoutButtonProps)=>{
         </span>
     )
 }
+
