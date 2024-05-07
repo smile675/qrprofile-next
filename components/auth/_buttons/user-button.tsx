@@ -1,5 +1,4 @@
 "use client"
-
 import { 
     DropdownMenu,
     DropdownMenuItem,
@@ -17,13 +16,14 @@ import { useCurrentUser } from "@/hooks/useCurrentUser"
 import { LogOutButton } from "./logout-button"
 import { LogOut } from "lucide-react"
 import { DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
 import LoginButton from "../loginButton"
 
 
- export const UserButton=()=>{
-    const user = useCurrentUser()
+
+
+ export const UserButton=  ()=> {
+    // const user = useCurrentUser()
+    const user =  useCurrentUser()
 
     if (user == undefined){
         return (
@@ -33,6 +33,7 @@ import LoginButton from "../loginButton"
         )
     }
     return (
+  
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
                 
@@ -73,5 +74,9 @@ import LoginButton from "../loginButton"
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+    
     )
+    // return (
+    //   <LoginButton>login</LoginButton>
+    // )
  }

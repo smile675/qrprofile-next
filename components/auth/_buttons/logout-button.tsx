@@ -1,5 +1,6 @@
 import { logOut } from "@/actions/logout";
-import { redirect } from "next/navigation";
+// import { useSession } from "next-auth/react";
+
 
 
 interface LogoutButtonProps{
@@ -9,7 +10,8 @@ interface LogoutButtonProps{
 export const LogOutButton  = ({children}:  LogoutButtonProps)=>{
     const onClick = ()=> {
         logOut()
-        
+        // let session = useSession();
+        // session.data = null;
     }
 
     return (

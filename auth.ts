@@ -30,7 +30,7 @@ export const {
                 where: {id: user.id},
                 data: {emailVerified: new Date()}
             });
-        }
+        },
     },
 
 
@@ -86,7 +86,8 @@ export const {
             // console.log({session});
             return session;
         },
-        async jwt({token}){
+        async jwt({token, user, session}){
+
             if(!token.sub) return token;
             const existingUser = await getUserbyId(token.sub);
             if(!existingUser) return token;

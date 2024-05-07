@@ -24,12 +24,13 @@ import { ButtonLoading } from '../global_components/loading-button'
 import { useSearchParams } from 'next/navigation'
 import { FormWarning } from '../global_components/form-warning'
 import Link from 'next/link'
-import { OTPInput } from 'input-otp'
+
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '../ui/input-otp'
 
 export const LoginForm = () => {
 
   const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl")
 
   const urlError = searchParams.get("error") === "OAuthAccountNotLinked"
   ? "Email already in use with different provider"
@@ -47,7 +48,7 @@ export const LoginForm = () => {
     setError("");
     // setWarning("");
      startTransition(()=>{
-      login(values)
+      login(values, callbackUrl)
       .then((data)=>{
         if(data?.error){
           // form.reset();
