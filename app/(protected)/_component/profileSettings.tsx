@@ -53,6 +53,7 @@ const ProfileSettings =  ({user}:{user: ExtendedUser}) => {
           setError(data.error);
         }
         if(data.success){
+          form.reset();
           update();
           setSuccess(data.success);
         }

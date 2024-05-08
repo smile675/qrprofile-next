@@ -7,7 +7,6 @@ import { sendVerificationEmail } from "@/lib/mail"
 import { generateVerificationToken } from "@/lib/tokens"
 import { ProfileUpdateSchema } from "@/schemas"
 import * as z from "zod"
-import { unstable_update } from "@/auth"
 import { revalidatePath } from "next/cache"
 
 
@@ -64,25 +63,33 @@ export const updateProfile = async (
         values.newPassword = undefined;
     }
 
-
-    const updatedUser = await db.user.update({
+      console.log({...values}); 
+    await db.user.update({
         where: {id:user.id},
         data: {...values}
     });
 
     revalidatePath("/")
 
-    unstable_update({
-        user: {
-            name: updatedUser.name,
-            email: updatedUser.email,
-            isTwoFactorEnabled: updatedUser.isTwoFactorEnabled,
-            paymentStatus: updatedUser.paymentStatus,
-            image: updatedUser.image,
-        }
-    })
+    // unstable_update({
+    //     user: {
+    //         name: updatedUser.name,
+    //         email: updatedUser.email,
+    //         isTwoFactorEnabled: updatedUser.isTwoFactorEnabled,
+    //         paymentStatus: updatedUser.paymentStatus,
+    //         image: updatedUser.image,
+    //     }
+    // })
 
     return{success: "Profile Updated"}
 
 
 }
+
+//$2a$10$XIIyN.iazSYjvHbePLFZx.yHOFROz.Kjx.AVssG/6yitb9YU4I6lO
+//$2a$10$XIIyN.iazSYjvHbePLFZx.yHOFROz.Kjx.AVssG/6yitb9YU4I6lO
+
+//$2a$10$O5xZDackvIWbGvZRz6u/RuUuuP1H15WMUhtpQlvMPhe1AOFwMs7zS
+//$2a$10$O5xZDackvIWbGvZRz6u/RuUuuP1H15WMUhtpQlvMPhe1AOFwMs7zS
+
+//$2a$10$LJ/N2FcJE0CkWJMnjIDZzuzOBKXm6jQ5C8wfPjNcrqAg.5Rn8Kr9i

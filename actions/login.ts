@@ -103,6 +103,7 @@ export const login = async (
      await signIn("credentials", {
         email,
         password,
+        
         redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
      });
    } catch (error) {
