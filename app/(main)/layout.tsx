@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
 import NavBar from "@/components/global_components/NavBar";
+import { currentUser } from "@/lib/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,15 +11,17 @@ export const metadata: Metadata = {
   description: "Digitalize your profile",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
+
+  const user = await currentUser()
+  return ( 
     <html lang="en">
       <body className={inter.className}>
-        <NavBar/>
+        <NavBar user={user}/>
         <div>{children}</div>
         <footer>Footer</footer>
       </body>

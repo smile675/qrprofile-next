@@ -12,20 +12,21 @@ import {
     AvatarFallback,
  } from "@radix-ui/react-avatar"
 import { FaUser } from "react-icons/fa"
-import { useCurrentUser } from "@/hooks/useCurrentUser"
+// import { useCurrentUser } from "@/hooks/useCurrentUser"
 import { LogOutButton } from "./logout-button"
 import { LogOut } from "lucide-react"
 import { DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 import LoginButton from "../loginButton"
+import { User } from "next-auth"
 
 
 
 
- export const UserButton=  ()=> {
+ export const UserButton=  ({user}:{user: User | undefined})=> {
     // const user = useCurrentUser()
-    const user =  useCurrentUser()
+    // const user =  useCurrentUser()
 
-    if (user == undefined){
+    if (!user){
         return (
             <LoginButton>
                 Log in

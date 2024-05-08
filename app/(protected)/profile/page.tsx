@@ -26,10 +26,12 @@ import { useCurrentUser } from "@/hooks/useCurrentUser"
 import { FormSuccess } from "@/components/global_components/form-success"
 import { FormError } from "@/components/global_components/form-error"
 import { Switch } from "@/components/ui/switch"
+import { User } from "next-auth"
+import { ExtendedUser } from "@/next-auth"
 
-const Profile =  () => {
+const Profile =  ({user}: {user: ExtendedUser}) => {
 
-  const user = useCurrentUser();
+  // const user = useCurrentUser();
 
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
@@ -71,6 +73,9 @@ const Profile =  () => {
     <div className="flex justify-center items-center p-3">
       <div className="w-[600px] max-sm:w-full">
         <p>Profile</p>
+        <div>
+          {JSON.stringify({user})}
+        </div>
         <Form {...form}>
           <form 
           className="space-y-6"
