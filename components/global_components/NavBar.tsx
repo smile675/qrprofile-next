@@ -2,27 +2,17 @@
 
 import React from 'react'
 
-import mainMenu from '@/app/assets/data/mainMenu'
-import { Button } from '../ui/button';
-import Link from 'next/link';
-
-import { Menu } from 'lucide-react';
-import { Drawer, DrawerContent, DrawerTrigger } from '../ui/drawer';
-
-
-import LoginButton from '../auth/loginButton';
 import { UserButton } from '../auth/_buttons/user-button';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { User } from 'next-auth';
 
-const NavBar = ({user}: {user: User | undefined}) => {
+const NavBar = () => {
    
   //new navbar
   return (
     <nav className='w-full h-14 bg-secondary border-b-2 flex justify-between items-center px-4'>
       <div>{/* Drawer [small device]*/}</div>
       <div>Menu button</div>
-      <UserButton user={user}/> 
+      <UserButton/> 
     </nav>
   )
 

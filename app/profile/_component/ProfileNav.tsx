@@ -3,10 +3,11 @@ import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { UserButton } from "@/components/auth/_buttons/user-button"
-import { User } from "next-auth"
 
 
- export const  ProfileNav = ({user}:{user: User | undefined})=>{
+
+ export const  ProfileNav = ()=>{
+
     const path = usePathname()
 
 
@@ -40,7 +41,7 @@ import { User } from "next-auth"
                 <Link href={profileRoute.pro}>Pro</Link>
             </Button>
 
-            <UserButton user={user}/>
+            <UserButton />
 
         </nav>
     )

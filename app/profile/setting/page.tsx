@@ -1,23 +1,18 @@
-import { currentUser } from '@/lib/auth'
-import React from 'react'
-import ProfileSettings from '../_component/profileSettings';
+"use client";
+import React from "react";
+import ProfileSettings from "../_component/profileSettings";
+import { useSession } from "next-auth/react";
 
-const ProfileSettingPage = async() => {
-  const user = await currentUser();
-  if (!user){
-    return (
-      <div>
-        Could not load
-      </div>
-    )
+const ProfileSettingPage = () => {
+  const { data: session } = useSession();
+  const user = session?.user;
+  if (!user) {
+    return <div>Could not load</div>;
   }
-  return (
-    <ProfileSettings user={user}/>
-  )
-}
+  return <ProfileSettings />;
+};
 
-export default ProfileSettingPage
-
+export default ProfileSettingPage;
 
 // "use client"
 
@@ -33,9 +28,7 @@ export default ProfileSettingPage
 
 // import { useSession } from "next-auth/react"
 
-
-
-// import { 
+// import {
 //   Form,
 //   FormField,
 //   FormControl,
@@ -99,7 +92,7 @@ export default ProfileSettingPage
 //         <p>Profile</p>
 
 //         <Form {...form}>
-//           <form 
+//           <form
 //           className="space-y-6"
 //           onSubmit={form.handleSubmit(onSubmit)}
 //           >
@@ -111,7 +104,7 @@ export default ProfileSettingPage
 //               <FormItem>
 //                 <FormLabel>Name</FormLabel>
 //                 <FormControl>
-//                   <Input 
+//                   <Input
 //                   {...field}
 //                   disabled = {isPending}
 //                   placeholder="Your name"
@@ -131,7 +124,7 @@ export default ProfileSettingPage
 //               <FormItem>
 //                 <FormLabel>Email</FormLabel>
 //                 <FormControl>
-//                   <Input 
+//                   <Input
 //                   {...field}
 //                   disabled = {isPending}
 //                   placeholder="Your Email"
@@ -149,12 +142,12 @@ export default ProfileSettingPage
 //               <FormItem>
 //                 <FormLabel>Password</FormLabel>
 //                 <FormControl>
-//                   <Input 
+//                   <Input
 //                   {...field}
 //                   placeholder="******"
 //                   // type="password"
 //                   disabled = {isPending}
-                  
+
 //                   />
 //                 </FormControl>
 //                 <FormMessage/>
@@ -168,7 +161,7 @@ export default ProfileSettingPage
 //               <FormItem>
 //                 <FormLabel>New Password</FormLabel>
 //                 <FormControl>
-//                   <Input 
+//                   <Input
 //                   {...field}
 //                   disabled = {isPending}
 //                   placeholder="******"
@@ -199,7 +192,7 @@ export default ProfileSettingPage
 //                 </FormControl>
 
 //               </FormItem>
-              
+
 //             )}
 //             />
 //                 </>
@@ -211,7 +204,7 @@ export default ProfileSettingPage
 //                 <FormItem>
 //                   <FormLabel>Email</FormLabel>
 //                   <FormControl>
-//                     <Input 
+//                     <Input
 //                     {...field}
 //                     disabled = {true}
 //                     placeholder="Your Email"
@@ -223,7 +216,7 @@ export default ProfileSettingPage
 //               )}
 //               />
 //             }
-            
+
 //             </div>
 //             <FormSuccess message={success}/>
 //             <FormError message={error}/>

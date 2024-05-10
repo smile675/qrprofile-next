@@ -12,12 +12,10 @@ import { getAccountByUserId } from "./data/account"
 
 
 export const {
-    handlers: {GET, POST},
+    handlers,
     signIn,
     signOut,
     auth,
-    unstable_update,
-
 } = NextAuth({
     pages: {
         signIn: "/login",
@@ -35,13 +33,13 @@ export const {
 
 
     callbacks: {
-        async redirect({ url, baseUrl }) {
-            // Allows relative callback URLs
-            if (url.startsWith("/")) return `${baseUrl}${url}`
-            // Allows callback URLs on the same origin
-            else if (new URL(url).origin === baseUrl) return url
-            return baseUrl
-          },
+        // async redirect({ url, baseUrl }) {
+        //     // Allows relative callback URLs
+        //     if (url.startsWith("/")) return `${baseUrl}${url}`
+        //     // Allows callback URLs on the same origin
+        //     else if (new URL(url).origin === baseUrl) return url
+        //     return baseUrl
+        //   },
         async signIn({user, account}){
             // alow Oauth
             if(account?.provider !== 'credentials') return true;
@@ -62,32 +60,7 @@ export const {
             }
             return true;
         },
- 
-        async session({token, session}){
-            // console.log({
-            //     sessonTOken: token,
-            // });
-            if(token.sub && session.user){
-                session.user.id = token.sub;
-            }
-            
-            if(token.paymentStatus && session.user){
-                session.user.paymentStatus = token.paymentStatus as PaymentStatus;
-            }
-            if(session.user){
-                session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
-            }
-            if(session.user){
-                session.user.name = token.name;
-                session.user.email = token.email!;
-                session.user.image = token.picture;
-                session.user.isOAuth = token.isOAuth as boolean;
-            }
-            // console.log({session});
-            return session;
-        },
-        async jwt({token, user, session}){
-
+        async jwt({token, user, session, trigger}){
             if(!token.sub) return token;
             const existingUser = await getUserbyId(token.sub);
             if(!existingUser) return token;
@@ -101,9 +74,39 @@ export const {
             
             token.paymentStatus = existingUser.paymentStatus;
             token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled
-            // console.log({token: token});
+            // console.log({user});
+            // console.log({session});
+            // if(trigger=="update"){
+            //     session.user = user;
+            // }
+            console.log({token});
+
+
             return token;
         },
+ 
+        async session({token, session, trigger}){
+            // console.log({
+            //     sessonTOken: token,
+            // });
+            if(token.sub && session.user){
+                session.user.id = token.sub;
+            }
+            
+            if(token.paymentStatus && session.user){
+                session.user.paymentStatus = token.paymentStatus as PaymentStatus;
+            }
+            if(session.user){
+                session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+                session.user.name = token.name;
+                session.user.email = token.email!;
+                session.user.image = token.picture;
+                session.user.isOAuth = token.isOAuth as boolean;
+            }
+            // console.log({session});
+            return session;
+        },
+        
     },
     adapter: PrismaAdapter(db),
     session: {strategy: "jwt"},
